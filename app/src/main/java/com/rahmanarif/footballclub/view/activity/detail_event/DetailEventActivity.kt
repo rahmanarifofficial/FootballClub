@@ -50,7 +50,7 @@ class DetailEventActivity : AppCompatActivity(), DetailViewMatch {
                 data.homeYellowCards, data.awayRedCards, data.awayYellowCards, data.dateEvent)
         idHomeTeam = data.homeTeamId.toString()
         idAwayTeam = data.awayTeamId.toString()
-        Log.d("idHome", idHomeTeam)
+//        Log.d("idHome", data.)
         when(data.eventId){
             idEvent -> {
                 eventName.text = data.event

@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.detail_event.DetailEventActivity" />
-        <activity android:name=".view.activity.detail_team.DetailTeamActivity"></activity>
+        <activity android:name=".view.activity.detail_team.DetailTeamActivity" />
+        <activity android:name=".view.activity.detail_player.DetailPlayerActivity"></activity>
     </application>
 
 </manifest>

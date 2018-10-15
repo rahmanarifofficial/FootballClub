@@ -18,12 +18,14 @@ import com.rahmanarif.footballclub.db.database
 import com.rahmanarif.footballclub.model.Player
 import com.rahmanarif.footballclub.model.Team
 import com.rahmanarif.footballclub.presenter.DetailTeamPresenter
+import com.rahmanarif.footballclub.view.activity.detail_player.DetailPlayerActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail_team.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 
 class DetailTeamActivity : AppCompatActivity(), DetailViewTeam {
@@ -51,7 +53,7 @@ class DetailTeamActivity : AppCompatActivity(), DetailViewTeam {
 
                 playerList.layoutManager = LinearLayoutManager(this)
                 adapter = PlayerListAdapter(player) {
-                    toast("halo")
+                    startActivity<DetailPlayerActivity>("idPlayer" to "${it.playerId}")
                 }
                 playerList.adapter = adapter
 

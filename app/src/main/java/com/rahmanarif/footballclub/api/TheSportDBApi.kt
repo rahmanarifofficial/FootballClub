@@ -25,6 +25,10 @@ object TheSportDBApi {
         return "https://www.thesportsdb.com/api/v1/json/1/lookup_all_players.php?id="+idTeam
     }
 
+    fun getPlayerDetail(idPlayer: String): String{
+        return "https://www.thesportsdb.com/api/v1/json/1/lookupplayer.php?id="+idPlayer
+    }
+
     fun getLeague(): String {
         return "https://www.thesportsdb.com/api/v1/json/1/all_leagues.php"
     }
