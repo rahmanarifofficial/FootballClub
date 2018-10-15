@@ -2,12 +2,12 @@ package com.rahmanarif.footballclub.view.fragment.team
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.MenuItemCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.SearchView
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
@@ -27,13 +27,15 @@ import org.jetbrains.anko.support.v4.onRefresh
 
 class TeamFragment : Fragment(), TeamView {
     private var teams: MutableList<Team> = mutableListOf()
+    private var leagueName: String = "English%20Premier%20League"
+
     private lateinit var presenter: TeamPresenter
     private lateinit var adapter: TeamListAdapter
     private lateinit var spinner: Spinner
     private lateinit var teamList: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefresh: SwipeRefreshLayout
-    private lateinit var leagueName: String
+
 
     override fun showLoading() {
         progressBar.visible()
@@ -57,6 +59,8 @@ class TeamFragment : Fragment(), TeamView {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        setHasOptionsMenu(true)
 
         val spinnerItems = resources.getStringArray(R.array.league)
         val spinnerAdapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, spinnerItems)
@@ -100,4 +104,31 @@ class TeamFragment : Fragment(), TeamView {
         return v
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.clear()
+        inflater?.inflate(R.menu.search_menu, menu)
+        val searchItem = menu?.findItem(R.id.action_search)
+        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
+        searchView.setQueryHint("Find Team")
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query.isNullOrEmpty() or query.isNullOrBlank()) {
+                    presenter.getTeamList(leagueName)
+                } else {
+                    presenter.getSearchTeam(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query.isNullOrEmpty() or query.isNullOrBlank()) {
+                    presenter.getTeamList(leagueName)
+                } else {
+                    presenter.getSearchTeam(query)
+                }
+                return true
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 }

@@ -2,13 +2,13 @@ package com.rahmanarif.footballclub.view.fragment.schedule
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.MenuItemCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
@@ -126,5 +126,33 @@ class PastEventFragment : Fragment() , MatchView {
 
         return v
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.clear()
+        inflater?.inflate(R.menu.search_menu, menu)
+        val searchItem = menu?.findItem(R.id.action_search)
+        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
+        searchView.setQueryHint("Find Event")
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query.isNullOrEmpty() or query.isNullOrBlank()) {
+                    presenter.getPastEventsList(leagueId)
+                } else {
+                    presenter.getSearchEventList(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query.isNullOrEmpty() or query.isNullOrBlank()) {
+                    presenter.getPastEventsList(leagueId)
+                } else {
+                    presenter.getSearchEventList(query)
+                }
+                return true
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }

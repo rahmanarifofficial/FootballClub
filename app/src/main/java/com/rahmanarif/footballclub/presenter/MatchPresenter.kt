@@ -37,7 +37,20 @@ class MatchPresenter(private val view: MatchView,
                         EventsResponse::class.java
                 )
             }
-            view.showPastEvents(data.await().events)
+            view.showNextEvents(data.await().events)
+            view.hideLoading()
+        }
+    }
+
+    fun getSearchEventList(match: String?) {
+        view.showLoading()
+        async(context.main) {
+            val data = bg {
+                gson.fromJson(apiRepository.doRequest(TheSportDBApi.getSearchEvent(match)),
+                        EventsResponse::class.java
+                )
+            }
+            view.showNextEvents(data.await().searchEvent)
             view.hideLoading()
         }
     }

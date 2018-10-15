@@ -13,12 +13,20 @@ object TheSportDBApi {
         return "https://www.thesportsdb.com/api/v1/json/1/lookupevent.php?id="+idEvent
     }
 
+    fun getSearchEvent(match: String?): String{
+        return "https://www.thesportsdb.com/api/v1/json/1/searchevents.php?e="+match
+    }
+
     fun getTeamList(league: String?): String{
         return "https://www.thesportsdb.com/api/v1/json/1/search_all_teams.php?l="+league
     }
 
     fun getTeamDetail(idTeam: String?): String{
         return "https://www.thesportsdb.com/api/v1/json/1/lookupteam.php?id="+idTeam
+    }
+
+    fun getSearchTeam(team: String?): String{
+        return "https://www.thesportsdb.com/api/v1/json/1/searchteams.php?t="+team
     }
 
     fun getPlayerTeam(idTeam: String?): String{

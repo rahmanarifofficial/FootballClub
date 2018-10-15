@@ -2,13 +2,13 @@ package com.rahmanarif.footballclub.view.fragment.schedule
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.MenuItemCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SearchView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
@@ -27,10 +27,10 @@ import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 
 
-
-
 class NextEventFragment : Fragment(), MatchView {
     private var events: MutableList<Events> = mutableListOf()
+    private var leagueId: String = "4328"
+
     private lateinit var presenter: MatchPresenter
     private lateinit var eventList: RecyclerView
     private lateinit var progressBar: ProgressBar
@@ -38,7 +38,7 @@ class NextEventFragment : Fragment(), MatchView {
     private lateinit var spinner: Spinner
     private lateinit var adapter: EventListAdapter
     private lateinit var leagueName: String
-    private lateinit var leagueId: String
+
 
     override fun showLoading() {
         progressBar.visible()
@@ -80,20 +80,20 @@ class NextEventFragment : Fragment(), MatchView {
         val gson = Gson()
         presenter = MatchPresenter(this, request, gson)
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 leagueName = spinner.selectedItem.toString()
-                if (leagueName.equals("English Premier League", true)){
+                if (leagueName.equals("English Premier League", true)) {
                     leagueId = "4328"
-                } else if (leagueName.equals("English League Championship", true)){
+                } else if (leagueName.equals("English League Championship", true)) {
                     leagueId = "4329"
-                } else if (leagueName.equals("German Bundesliga", true)){
+                } else if (leagueName.equals("German Bundesliga", true)) {
                     leagueId = "4331"
-                } else if (leagueName.equals("Italian Serie A", true)){
+                } else if (leagueName.equals("Italian Serie A", true)) {
                     leagueId = "4332"
-                } else if (leagueName.equals("French Ligue 1", true)){
+                } else if (leagueName.equals("French Ligue 1", true)) {
                     leagueId = "4334"
-                } else if (leagueName.equals("Spanish La Liga", true)){
+                } else if (leagueName.equals("Spanish La Liga", true)) {
                     leagueId = "4335"
                 }
                 Log.d("league", leagueName)
@@ -101,11 +101,11 @@ class NextEventFragment : Fragment(), MatchView {
                 presenter.getNextEventsList(leagueId)
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) { }
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
         //eventList
         eventList.layoutManager = LinearLayoutManager(activity)
-        adapter = EventListAdapter(events){
+        adapter = EventListAdapter(events) {
             activity?.startActivity<DetailEventActivity>("idEvent" to "${it.eventId}")
         }
         eventList.adapter = adapter
@@ -125,5 +125,33 @@ class NextEventFragment : Fragment(), MatchView {
         swipeRefresh = v.findViewById(R.id.swipeRefresh_next_event)
 
         return v
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        menu?.clear()
+        inflater?.inflate(R.menu.search_menu, menu)
+        val searchItem = menu?.findItem(R.id.action_search)
+        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
+        searchView.setQueryHint("Find Event")
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query.isNullOrEmpty() or query.isNullOrBlank()) {
+                    presenter.getNextEventsList(leagueId)
+                } else {
+                    presenter.getSearchEventList(query)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query.isNullOrEmpty() or query.isNullOrBlank()) {
+                    presenter.getNextEventsList(leagueId)
+                } else {
+                    presenter.getSearchEventList(query)
+                }
+                return true
+            }
+        })
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }
