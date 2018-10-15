@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/schedule_menu"
+        android:title="Schedule"
+        android:icon="@drawable/ic_schedule_black_24dp"/>
+    <item
+        android:id="@+id/team_menu"
+        android:title="Team"
+        android:icon="@drawable/ic_brightness_black_24dp"/>
+    <item
+        android:id="@+id/favorite_menu"
+        android:title="Favorite"
+        android:icon="@drawable/ic_stars_black_24dp"/>
+</menu>
