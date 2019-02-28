@@ -25,5 +25,4 @@
         android:layout_alignParentBottom="true">
     </android.support.design.widget.BottomNavigationView>
 
-
 </RelativeLayout>
